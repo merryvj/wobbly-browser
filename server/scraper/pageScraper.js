@@ -1,5 +1,5 @@
 
-
+const { URL } = require('url'); 
 
 const scraperObject = {
 	async scraper(browser, _url){
@@ -25,8 +25,8 @@ const scraperObject = {
 		let pagePromise = (link) => new Promise(async(resolve, reject) => {
 			let newPage = await browser.newPage();
 			await newPage.goto(link);
-			await page.waitForSelector('body');
-			let newUrls = await page.$$eval('a', as => as.map(a => {
+			await newPage.waitForSelector('body');
+			let newUrls = await newPage.$$eval('a', as => as.map(a => {
 				return {
 					link: a.href,
 					content: a.textContent
@@ -87,6 +87,12 @@ const scraperObject = {
 			})
 		})
 
+		let targetHost = new URL(_url).host;
+
+		scrapedData = scrapedData.filter((d) => {
+			const parsedUrl = new URL(d.link);
+			return parsedUrl.host === targetHost;
+		})
 
         return scrapedData;
 	},
