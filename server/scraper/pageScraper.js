@@ -5,6 +5,7 @@ var url = require('url');
 
 const scraperObject = {
 	async scraper(browser, _url){
+		console.log("going to " + _url);
 		const page = await browser.newPage();
 		await page.goto(_url);
 		let targetHost = url.parse(_url, true).host;
@@ -14,6 +15,7 @@ const scraperObject = {
 
 		//filter links for duplicates
 		links = [...new Set(links)];
+		links.filter((link) => !link.startsWith('#') && !link.startsWith('javascript:') && !link.startsWith('mailto:'));
 		
 	
 		const mainTitle = await page.title();
@@ -28,12 +30,12 @@ const scraperObject = {
 		for (let link of links) {
 			let parsedLink = url.parse(link, true);
 			if (parsedLink.host != targetHost) {
-				const wwwPattern = /^https?:\/\/(www\.)/i;
-				const linkName = parsedLink.host.replace(wwwPattern, '');
+				//const wwwPattern = /^https?:\/\/(www\.)/i;
+				//const linkName = parsedLink.host.replace(wwwPattern, '');
 
 				result.children.push({
 					link: link,
-					content: linkName,
+					content: link,
 					children: [link]
 				})
 
@@ -53,7 +55,6 @@ const scraperObject = {
 			
 		}
 
-		console.log(result);
 		return result;
 	},
 }
