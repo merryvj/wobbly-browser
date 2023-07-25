@@ -15,9 +15,9 @@ const scraperObject = {
 
 		//filter links for duplicates
 		links = [...new Set(links)];
-		links.filter((link) => !link.startsWith('#') && !link.startsWith('javascript:') && !link.startsWith('mailto:'));
-		
+		links = links.filter((link) => filterLink(link));
 	
+		console.log(links);
 		const mainTitle = await page.title();
 
 		const result = {
@@ -59,6 +59,14 @@ const scraperObject = {
 	},
 }
 
+function filterLink(link) {
+
+	if (link.includes('#') || link.startsWith('javascript:') || link.startsWith('mailto:')) {
+		return false;
+	}
+
+	return true;
+}
 module.exports = scraperObject;
 
 
