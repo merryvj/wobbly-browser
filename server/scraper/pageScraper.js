@@ -30,12 +30,12 @@ const scraperObject = {
 		for (let link of links) {
 			let parsedLink = url.parse(link, true);
 			if (parsedLink.host != targetHost) {
-				//const wwwPattern = /^https?:\/\/(www\.)/i;
-				//const linkName = parsedLink.host.replace(wwwPattern, '');
+				const wwwPattern = /^https?:\/\/(www\.)/i;
+				const linkName = parsedLink.host.replace(wwwPattern, '');
 
 				result.children.push({
 					link: link,
-					content: link,
+					content: linkName,
 					children: [link]
 				})
 
